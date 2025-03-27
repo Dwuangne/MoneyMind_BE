@@ -21,6 +21,7 @@ namespace MoneyMind_API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll(
             [FromQuery] Guid? WalletCategoryId = null,
             [FromQuery] int pageIndex = 1,

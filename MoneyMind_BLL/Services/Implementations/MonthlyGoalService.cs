@@ -158,7 +158,7 @@ namespace MoneyMind_BLL.Services.Implementations
             if (monthlyGoal == null) return;
 
             bool allAchieved = true;
-            bool previouslyCompleted = monthlyGoal.IsCompleted;
+
 
             foreach (var goalItem in monthlyGoal.GoalItems)
             {
@@ -170,7 +170,7 @@ namespace MoneyMind_BLL.Services.Implementations
             }
 
             // Check if the status changed from incomplete to complete
-            if (allAchieved && !previouslyCompleted)
+            if (allAchieved)
             {
                 // Send notification only when status changes from incomplete to complete
                 await _notificationService.SendNotificationToUser(
