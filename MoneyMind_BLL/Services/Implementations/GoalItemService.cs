@@ -135,8 +135,6 @@ namespace MoneyMind_BLL.Services.Implementations
             var goalItem = await goalItemRepository.GetByWalletTypeAsync(userId, walletTypeId, monthlyGoalId);
             if (goalItem != null)
             {
-                bool wasAchievedBefore = goalItem.IsAchieved;
-
                 goalItem.UsedAmount += amountDifference;
                 goalItem.UsedPercentage = (goalItem.UsedAmount / totalAmount) * 100;
 
@@ -144,7 +142,7 @@ namespace MoneyMind_BLL.Services.Implementations
                 UpdateIsAchieved(goalItem);
 
                 // Check if goal item status changed to achieved
-                if (!wasAchievedBefore && goalItem.IsAchieved)
+                if (goalItem.IsAchieved)
                 {
                     var walletType = goalItem.WalletType;
 
@@ -166,7 +164,6 @@ namespace MoneyMind_BLL.Services.Implementations
             if (monthlyGoal == null) return;
 
             bool allAchieved = true;
-            bool previouslyCompleted = monthlyGoal.IsCompleted;
 
             foreach (var goalItem in monthlyGoal.GoalItems)
             {
@@ -177,7 +174,7 @@ namespace MoneyMind_BLL.Services.Implementations
                 }
             }
 
-            if (allAchieved && !previouslyCompleted)
+            if (allAchieved)
             {
                 // Send notification only when status changes from incomplete to complete
                 await _notificationService.SendNotificationToUser(
